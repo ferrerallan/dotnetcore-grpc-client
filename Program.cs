@@ -2,8 +2,7 @@
 using Grpc.Net.Client;
 using GrpcGreeterClient;
 
-// The port number must match the port of the gRPC server.
-//using var channel = GrpcChannel.ForAddress("http://localhost:5069");
+Console.WriteLine("Initializing poc...");
 var channel = GrpcChannel.ForAddress("http://localhost:5069", new GrpcChannelOptions
     {
         MaxReceiveMessageSize = 500 * 1024 * 1024, // 5 MB
@@ -12,12 +11,16 @@ var channel = GrpcChannel.ForAddress("http://localhost:5069", new GrpcChannelOpt
 var client = new Greeter.GreeterClient(channel);
 DateTime startTime = DateTime.Now;
     
-    
+Console.WriteLine("Requesting data...");
 var reply = await client.SayHelloAsync(
                   new HelloRequest { Name = "GreeterClient" });
-//Console.WriteLine("Greeting: " + reply.Message);
+
+Console.WriteLine("Requesting data... Done");
+
 DateTime endtime = DateTime.Now;
 TimeSpan duration = endtime-startTime; 
-Console.WriteLine($"Duration {duration.Seconds.ToString()}");
-Console.ReadKey();
+Console.WriteLine($"Duration: {duration.Seconds.ToString()} seconds");
+Console.WriteLine("Press any key to show the data...");
+Console.ReadLine();
+Console.WriteLine(reply);
 
